@@ -14,7 +14,7 @@
             <h4>{{item.bookName}}</h4>
             <p>{{item.bookInfo}}</p>
             <b>{{item.bookPrice}}</b>
-            <button @click="rmbook(item.bookId)">删除</button>
+            <button @click.stop="rmbook(item.bookId)">删除</button>
           </div>
         </router-link>
       </ul>
