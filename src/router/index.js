@@ -15,7 +15,7 @@ export default new Router({
         { path: '/list', component: list },
         { path: '/collect', component: collect },
         { path: '/add', component: add },
-        { path: '/detail', component: detail },
+        { path: '/detail/:bid', component: detail },
         { path: '*', redirect: '/home' }
     ]
 })

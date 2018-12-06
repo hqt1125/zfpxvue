@@ -3,7 +3,12 @@
     <mheader>列表页</mheader>
     <div class="content">
       <ul>
-        <li v-for="(item,index) in books" :key="index">
+        <router-link
+          v-for="(item,index) in books"
+          :key="index"
+          :to="`/detail/${item.bookId}`"
+          tag="li"
+        >
           <img :src="item.bookCover">
           <div>
             <h4>{{item.bookName}}</h4>
@@ -11,7 +16,7 @@
             <b>{{item.bookPrice}}</b>
             <button @click="rmbook(item.bookId)">删除</button>
           </div>
-        </li>
+        </router-link>
       </ul>
     </div>
   </div>
