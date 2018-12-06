@@ -1,4 +1,4 @@
-# zfpx vue小项目
+# zfpx vue
 
 > A Vue.js project
 
