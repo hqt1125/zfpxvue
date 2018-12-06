@@ -39,11 +39,17 @@ http.createServer((req, res) => {
         let id = parseInt(query.id);
         switch (req.method) {
             case "GET":
-                if (id) { } else {
+                if (id) {
                     read(function (books) {
-                        let hot = books.reverse();
+                        let book = books.find((item) => item.bookId == id);
+                        if (!book) book = {}
                         res.setHeader('Content-Type', 'application/json;charset=utf8');
-                        res.end(JSON.stringify(hot))
+                        res.end(JSON.stringify(book))
+                    })
+                } else {
+                    read(function (books) {
+                        res.setHeader('Content-Type', 'application/json;charset=utf8');
+                        res.end(JSON.stringify(books.reverse()))
                     })
                 }
                 break;
