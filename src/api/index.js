@@ -18,3 +18,14 @@ export let removeBook = (id) => {
 export let findOneBook = (id) => {
     return axios.get(`/book?id=${id}`)
 }
+/**
+ * 
+ * @param {编号} id 
+ * @param {数据} data 
+ */
+export let updataBook = (id, data) => {
+    return axios.put(`/book?id=${id}`, data)
+}
+export let addBook = (data) => {
+    return axios.post('/book', data)
+}

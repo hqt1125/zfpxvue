@@ -39,7 +39,7 @@ http.createServer((req, res) => {
         let id = parseInt(query.id);
         switch (req.method) {
             case "GET":
-                if (id) {
+                if (typeof id !== 'undefined' && !isNaN(id)) {
                     read(function (books) {
                         let book = books.find((item) => item.bookId == id);
                         if (!book) book = {}
@@ -54,8 +54,42 @@ http.createServer((req, res) => {
                 }
                 break;
             case "POST":
+                let str = '';
+                req.on('data', tuck => {
+                    str += tuck;
+                })
+                req.on('end', () => {
+                    let book = JSON.parse(str);
+                    read(function (books) {
+                        book.bookId = books.length ? books[books.length - 1].bookId + 1 : 1;
+                        books.push(book);
+                        write(books, function () {
+                            res.end(JSON.stringify(book))
+                        })
+                    })
+                })
                 break;
             case "PUT":
+                if (id) {
+                    let str = '';
+                    req.on('data', tuck => {
+                        str += tuck;
+                    })
+                    req.on('end', () => {
+                        let book = JSON.parse(str);
+                        read(function (books) {
+                            books = books.map(item => {
+                                if (item.bookId == id) {
+                                    return book
+                                }
+                                return item;
+                            });
+                            write(books, function () {
+                                res.end(JSON.stringify(book))
+                            })
+                        })
+                    })
+                }
                 break;
             case "DELETE":
                 read(function (books) {
