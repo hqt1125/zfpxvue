@@ -1,3 +1,4 @@
+// @ts-nocheck
 import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:8809';
 axios.interceptors.response.use((res) => {
