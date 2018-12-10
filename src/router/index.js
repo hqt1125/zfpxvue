@@ -11,7 +11,7 @@ Vue.use(Router)
 export default new Router({
     routes: [
         { path: '/', redirect: '/home' },
-        { path: '/home', component: home },
+        { path: '/home', component: home, meta: { keepAlive: true } },
         { path: '/list', component: list },
         { path: '/collect', component: collect },
         { path: '/add', component: add },
