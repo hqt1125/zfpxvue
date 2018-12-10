@@ -2,16 +2,19 @@
   <div>
     <mheader>首页</mheader>
     <div class="content">
-      <swiper :data="sliders"></swiper>
-      <div class="conbox">
-        <h3>热门图书</h3>
-        <ul>
-          <li v-for="(item,index) in books" :key="index">
-            <img :src="item.bookCover">
-            <b>{{item.bookName}}</b>
-          </li>
-        </ul>
-      </div>
+      <Loading v-if="loading"></Loading>
+      <template v-else>
+        <swiper :data="sliders"></swiper>
+        <div class="conbox">
+          <h3>热门图书</h3>
+          <ul>
+            <li v-for="(item,index) in books" :key="index">
+              <img :src="item.bookCover">
+              <b>{{item.bookName}}</b>
+            </li>
+          </ul>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -19,31 +22,41 @@
 <script>
 import mheader from "../base/mheader.vue";
 import swiper from "../base/swiper.vue";
-import { getsliders, getHotBook } from "../api/index.js";
+import Loading from "../base/Loading.vue";
+import { getsliders, getHotBook, getAll } from "../api/index.js";
 export default {
   data() {
     return {
       sliders: [],
-      books: []
+      books: [],
+      loading: true
     };
   },
   created() {
-    this.getsld();
-    this.getbok();
+    // this.getsld();
+    // this.getbok();
+    this.getdata();
   },
   components: {
     mheader,
-    swiper
+    swiper,
+    Loading
   },
   methods: {
-    async getsld() {
-      let data = await getsliders();
-      this.sliders = data;
-    },
-    async getbok() {
-      let data = await getHotBook();
-      this.books = data;
+    async getdata() {
+      let [sliders, books] = await getAll();
+      this.sliders = sliders;
+      this.books = books;
+      this.loading = false;
     }
+    // async getsld() {
+    //   let data = await getsliders();
+    //   this.sliders = data;
+    // },
+    // async getbok() {
+    //   let data = await getHotBook();
+    //   this.books = data;
+    // }
   }
 };
 </script>
