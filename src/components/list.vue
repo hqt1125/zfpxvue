@@ -46,7 +46,7 @@ export default {
         if (scrollTop + clientHeight + 20 > scrollHeight) {
           this.getData();
         }
-      }, 13);
+      }, 60);
     },
     more() {
       this.getData();
@@ -69,6 +69,55 @@ export default {
         this.offset = this.books.length;
       }
     }
+  },
+  mounted() {
+    let scroll = this.$refs.scroll;
+    let top = scroll.offsetTop;
+    let distance = 0;
+    scroll.addEventListener(
+      "touchstart",
+      e => {
+        if (scroll.scrollTop != 0 && scroll.offsetTop != top) return;
+        let start = e.touches[0].pageY; //手指点击的开始位置
+        let move = e => {
+          let current = e.touches[0].pageY;
+          distance = current - start; //求得拉动的距离，负数不要
+          if (distance > 0) {
+            if (distance <= 50) {
+              scroll.style.top = distance + top + "px";
+            } else {
+              distance = 50;
+              scroll.style.top = top + 50 + "px";
+            }
+          } else {
+            //如果不在考虑范围内，移除move和end
+            scroll.removeEventListener("touchmove", move);
+            scroll.removeEventListener("touchend", end);
+          }
+        };
+        let end = e => {
+          clearInterval(this.timer1);
+          this.timer1 = setInterval(() => {
+            if (distance <= 0) {
+              clearInterval(this.timer1);
+              distance = 0;
+              scroll.addEventListener("touchmove", move);
+              scroll.addEventListener("touchend", end);
+              scroll.style.top = top + "px";
+              this.books = [];
+              this.offset = 0;
+              this.getData();
+              return;
+            }
+            distance -= 1;
+            scroll.style.top = top + distance + "px";
+          }, 1);
+        };
+        scroll.addEventListener("touchmove", move);
+        scroll.addEventListener("touchend", end);
+      },
+      false
+    );
   },
   components: { mheader }
 };
