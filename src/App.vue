@@ -1,10 +1,14 @@
 <template>
   <div id="app">
     <tab></tab>
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive"></router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <transition name="fadeIn">
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+    </transition>
+    <transition name="fadeIn">
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </transition>
   </div>
 </template>
 
@@ -42,7 +46,17 @@ button {
   position: fixed;
   width: 100%;
   top: 40px;
-  bottom: 40px;
+  bottom: 60px;
   overflow: auto;
+}
+.fadeIn-enter {
+  opacity: 0;
+}
+.fadeIn-enter-active {
+  transition: all 0.3s linear;
+}
+.fadeIn-leave-active {
+  transition: all 0.3s linear;
+  opacity: 0;
 }
 </style>

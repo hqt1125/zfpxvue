@@ -4,6 +4,7 @@ let fs = require('fs');
 let url = require('url');
 let path = require('path');
 let sliders = ['//aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg', '//gw.alicdn.com/imgextra/i1/138/O1CN01J7ZLL91CtF8i27CqN_!!138-0-lubanu.jpg', '//gw.alicdn.com/imgextra/i3/43/O1CN01J7WSAz1CBjVo6o7xa_!!43-0-lubanu.jpg'];
+let pageSize = 5;
 function read(cb) {
     fs.readFile(path.join(__dirname, './book.json'), 'utf8', function (err, data) {
         if (err || data.length == 0) {
@@ -27,6 +28,19 @@ http.createServer((req, res) => {
     if (pathname == '/sliders') {
         res.setHeader('Content-Type', 'application/json;charset=utf8');
         return res.end(JSON.stringify(sliders));
+    }
+    if (pathname == '/page') {
+        let offset = parseInt(query.offset) || 0;
+        read(function (books) {
+            let result = books.reverse().slice(offset, offset + pageSize);
+            let hasMore = true;
+            if (books.length <= offset + pageSize) {
+                hasMore = false;
+            }
+            res.setHeader('Content-Type', 'application/json;charset=utf8');
+            res.end(JSON.stringify({ hasMore, books: result }));
+        });
+        return;
     }
     if (pathname == '/hot') {
         read(function (books) {

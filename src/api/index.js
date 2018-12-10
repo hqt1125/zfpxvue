@@ -33,3 +33,6 @@ export let addBook = (data) => {
 export let getAll = () => {
     return axios.all([getsliders(), getHotBook()])
 }
+export let pagation = (offset) => {
+    return axios.get(`/page?offset=${offset}`)
+};
