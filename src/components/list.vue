@@ -10,6 +10,7 @@
           tag="li"
         >
           <img :src="item.bookCover">
+          <!-- <img v-lazy="item.bookCover"> //懒加载-->
           <div>
             <h4>{{item.bookName}}</h4>
             <p>{{item.bookInfo}}</p>

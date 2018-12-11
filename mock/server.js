@@ -19,6 +19,7 @@ function write(data, cb) {
     fs.writeFile(path.join(__dirname, './book.json'), JSON.stringify(data), cb)
 }
 http.createServer((req, res) => {
+    //解决跨域问题，打包后可以忽略
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
     res.setHeader("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
@@ -118,4 +119,19 @@ http.createServer((req, res) => {
         }
         return
     }
+    //通过自己的服务启动打包后的代码
+    fs.stat(path.join(__dirname, '.' + pathname), function (err, stats) {
+        if (err) {
+            res.statusCode = 404;
+            res.end('NOT FOUND')
+        } else {//如果是目录会报错
+            if (stats.isDirectory()) {
+                let p = path.join(path.join(__dirname, '.' + pathname), './index.html');
+                fs.createReadStream(p).pipe(res);
+            } else {
+                fs.createReadStream(path.join(__dirname, '.' + pathname)).pipe(res);
+            }
+
+        }
+    })
 }).listen(8809)
