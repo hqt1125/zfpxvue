@@ -17,11 +17,11 @@ Vue.use(Router)
 export default new Router({
     routes: [
         { path: '/', redirect: '/home' },
-        { path: '/home', component: home, meta: { keepAlive: true } },
-        { path: '/list', component: list },
-        { path: '/collect', component: collect },
-        { path: '/add', component: add },
-        { path: '/detail/:bid', component: detail },
-        { path: '*', redirect: '/home' }
+        { path: '/home', component: home, meta: { keepAlive: true, title: '首页' } },
+        { path: '/list', component: list, meta: { title: '列表' } },
+        { path: '/collect', component: collect, meta: { title: '收藏' } },
+        { path: '/add', component: add, meta: { title: '添加' } },
+        { path: '/detail/:bid', component: detail, meta: { title: '详情' } },
+        { path: '*', redirect: '/home', meta: { title: '首页' } }
     ]
 })

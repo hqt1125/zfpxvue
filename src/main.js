@@ -9,6 +9,11 @@ require('swiper/dist/css/swiper.css')
 Vue.use(VueAwesomeSwiper)
 // Vue.use(VueLazyload)
 // Vue.use(notify, { delay: 2000 })
+//在进入路由之前每一次都会进入这个方法
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title;
+    next();
+})
 Vue.config.productionTip = false;
 new Vue({
     el: '#app',

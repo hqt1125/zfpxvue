@@ -15,7 +15,10 @@
             <h4>{{item.bookName}}</h4>
             <p>{{item.bookInfo}}</p>
             <b>{{item.bookPrice}}</b>
-            <button @click.stop="rmbook(item.bookId)">删除</button>
+            <div class="btn-list">
+              <button @click.stop="rmbook(item.bookId)">删除</button>
+              <button @click.stop>添加</button>
+            </div>
           </div>
         </router-link>
       </ul>
@@ -75,12 +78,14 @@ export default {
     let scroll = this.$refs.scroll;
     let top = scroll.offsetTop;
     let distance = 0;
+    let ismove = false;
     scroll.addEventListener(
       "touchstart",
       e => {
         if (scroll.scrollTop != 0 && scroll.offsetTop != top) return;
         let start = e.touches[0].pageY; //手指点击的开始位置
         let move = e => {
+          ismove = true;
           let current = e.touches[0].pageY;
           distance = current - start; //求得拉动的距离，负数不要
           if (distance > 0) {
@@ -97,6 +102,8 @@ export default {
           }
         };
         let end = e => {
+          if (!ismove) return;
+          ismove = false;
           clearInterval(this.timer1);
           this.timer1 = setInterval(() => {
             if (distance <= 0) {
@@ -163,5 +170,9 @@ export default {
   font-size: 24px;
   text-align: center;
   width: 100%;
+}
+.btn-list {
+  display: flex;
+  justify-content: space-around;
 }
 </style>
